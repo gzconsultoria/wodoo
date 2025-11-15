@@ -16,7 +16,6 @@
         'security/ir.model.access.csv',
         
         # Data
-        'data/default_stages.xml',
         'data/cron_jobs.xml',
         'data/automated_actions.xml',
         
