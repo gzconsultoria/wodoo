@@ -3,20 +3,21 @@ from odoo.exceptions import ValidationError
 
 
 class FinanceSuitability(models.Model):
-        def auto_expire_and_notify(self):
-            """Expira e notifica suitability se necessário (para ação automática Odoo 19)."""
-            for record in self:
-                if record.is_expired and record.state != 'expired':
-                    record.state = 'expired'
-                    advisor = record.advisor_id
-                    if advisor:
-                        advisor.notify_info(
-                            "A Suitability do cliente %s expirou!" % (record.finance_profile_id.partner_id.name)
-                        )
     """
     Formulário de Suitability - Conformidade CVM.
     Avalia o perfil de risco e adequação de investimentos.
     """
+
+    def auto_expire_and_notify(self):
+        """Expira e notifica suitability se necessário (para ação automática Odoo 19)."""
+        for record in self:
+            if record.is_expired and record.state != 'expired':
+                record.state = 'expired'
+                advisor = record.advisor_id
+                if advisor:
+                    advisor.notify_info(
+                        "A Suitability do cliente %s expirou!" % (record.finance_profile_id.partner_id.name)
+                    )
     _name = "finance.suitability"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Finance Suitability (CVM)"
