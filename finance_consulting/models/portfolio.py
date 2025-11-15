@@ -2,21 +2,22 @@ from odoo import models, fields, api
 
 
 class FinancePortfolio(models.Model):
-        def notify_rebalance_needed(self):
-            """Notifica consultor se carteira precisa rebalanceamento (para ação automática Odoo 19)."""
-            for record in self:
-                if record.needs_rebalance:
-                    advisor = record.advisor_id
-                    if advisor:
-                        advisor.notify_info(
-                            "Carteira %s do cliente %s precisa rebalanceamento!" % (
-                                record.name, record.finance_profile_id.partner_id.name
-                            )
-                        )
     """
     Carteira de investimentos do cliente.
     Acompanha posições reais vs. recomendado.
     """
+
+    def notify_rebalance_needed(self):
+        """Notifica consultor se carteira precisa rebalanceamento (para ação automática Odoo 19)."""
+        for record in self:
+            if record.needs_rebalance:
+                advisor = record.advisor_id
+                if advisor:
+                    advisor.notify_info(
+                        "Carteira %s do cliente %s precisa rebalanceamento!" % (
+                            record.name, record.finance_profile_id.partner_id.name
+                        )
+                    )
     _name = "finance.portfolio"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Portfolio Tracker"
