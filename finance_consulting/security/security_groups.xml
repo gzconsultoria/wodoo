@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data>
     <!-- Security Groups -->
 
     <!-- Base Group: Consultant -->
@@ -106,4 +107,5 @@
         <field name="perm_unlink">False</field>
     </record>
 
+    </data>
 </odoo>

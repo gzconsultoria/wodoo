@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data>
     <!-- Automated Actions / Cron Jobs -->
 
     <!-- Check Suitability Expiry Daily -->
@@ -24,4 +25,5 @@
         <field name="interval_type">weeks</field>
     </record>
 
+    </data>
 </odoo>

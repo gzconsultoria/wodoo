@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data>
     <!-- Investment Plan Views -->
 
     <!-- List View -->
@@ -119,4 +120,5 @@
         </field>
     </record>
 
+    </data>
 </odoo>

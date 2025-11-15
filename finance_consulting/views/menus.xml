@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data>
     <!-- Menu Structure -->
 
     <!-- Main Menu -->
@@ -79,4 +80,5 @@
         parent="finance_consulting_menu_reports"
         sequence="20"/>
 
+    </data>
 </odoo>
