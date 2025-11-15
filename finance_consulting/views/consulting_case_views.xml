@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Consulting Case Views -->
+
+    <!-- List View -->
+    <record id="finance_consulting_case_view_list" model="ir.ui.view">
+        <field name="name">finance.consulting_case.list</field>
+        <field name="model">finance.consulting_case</field>
+        <field name="arch" type="xml">
+            <list decoration-success="onboarding_complete" decoration-warning="state == 'waiting_client'" decoration-info="state == 'in_progress'">
+                <field name="name"/>
+                <field name="subject"/>
+                <field name="finance_profile_id"/>
+                <field name="advisor_id"/>
+                <field name="priority"/>
+                <field name="onboarding_complete"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="finance_consulting_case_view_form" model="ir.ui.view">
+        <field name="name">finance.consulting_case.form</field>
+        <field name="model">finance.consulting_case</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start_analysis" type="object" string="Iniciar Análise" class="oe_highlight" modifiers="{'invisible': [('state', '!=', 'open')]}"/>
+                    <button name="action_request_info" type="object" string="Solicitar Informação" modifiers="{'invisible': [('state', '=', 'waiting_client')]}"/>
+                    <button name="action_close_successful" type="object" string="Fechar - Sucesso" class="oe_highlight" modifiers="{'invisible': [('state', '=', 'closed_successful')]}"/>
+                    <button name="action_close_unsuccessful" type="object" string="Fechar - Sem Sucesso" modifiers="{'invisible': [('state', 'in', ['closed_successful', 'closed_unsuccessful'])]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <div class="alert alert-info" modifiers="{'invisible': [('onboarding_complete', '=', True)]}">
+                        <strong>Onboarding Incompleto!</strong> Complete todos os documentos necessários.
+                    </div>
+                    <group>
+                        <group string="Identificação">
+                            <field name="finance_profile_id" readonly="True"/>
+                            <field name="advisor_id"/>
+                            <field name="subject"/>
+                            <field name="priority"/>
+                        </group>
+                        <group string="Datas">
+                            <field name="date_created" readonly="True"/>
+                            <field name="date_closed"/>
+                        </group>
+                    </group>
+                    <field name="description" nolabel="1" placeholder="Descrever a situação financeira e objetivos do cliente..."/>
+                    <notebook>
+                        <page string="Checklist de Onboarding">
+                            <group>
+                                <group>
+                                    <field name="has_suitability"/>
+                                    <field name="has_id_copy"/>
+                                    <field name="has_address_proof"/>
+                                    <field name="has_income_proof"/>
+                                </group>
+                                <group>
+                                    <field name="has_pep_declaration"/>
+                                    <field name="has_fatca_w9"/>
+                                    <field name="has_cvm_term"/>
+                                    <field name="onboarding_complete" readonly="True"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Documentos">
+                            <field name="attachment_ids" nolabel="1">
+                                <kanban>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div class="oe_kanban_global_click">
+                                                <div class="o_kanban_image">
+                                                    <img alt="Anexo" t-att-src="kanban_image('ir.attachment', 'id', record.id.raw_value)"/>
+                                                </div>
+                                                <div class="oe_kanban_details">
+                                                    <field name="name"/>
+                                                    <div>
+                                                        <field name="file_size"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </page>
+                        <page string="Propostas">
+                            <field name="proposal_ids" nolabel="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="date_created"/>
+                                    <field name="state"/>
+                                    <field name="date_responded"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Reuniões">
+                            <field name="meeting_ids" nolabel="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="meeting_date"/>
+                                    <field name="meeting_type"/>
+                                    <field name="duration_minutes"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="finance_consulting_case_view_search" model="ir.ui.view">
+        <field name="name">finance.consulting_case.search</field>
+        <field name="model">finance.consulting_case</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Dossiê"/>
+                <field name="subject" string="Assunto"/>
+                <field name="finance_profile_id" string="Perfil"/>
+                <field name="advisor_id" string="Consultor"/>
+                <separator/>
+                <filter name="filter_open" string="Abertos" domain="[('state', 'in', ['open', 'in_progress', 'waiting_client'])]"/>
+                <filter name="filter_onboarding_pending" string="Onboarding Incompleto" domain="[('onboarding_complete', '=', False)]"/>
+                <filter name="filter_urgent" string="Urgentes" domain="[('priority', '=', 'urgent')]"/>
+                <separator/>
+                <group expand="1" string="Agrupar por">
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_priority" string="Prioridade" context="{'group_by': 'priority'}"/>
+                    <filter name="group_by_advisor" string="Consultor" context="{'group_by': 'advisor_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="finance_consulting_case_action" model="ir.actions.act_window">
+        <field name="name">Dossiês Consultivos</field>
+        <field name="res_model">finance.consulting_case</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Nenhum dossiê encontrado. Crie um novo!
+            </p>
+        </field>
+    </record>
+
+</odoo>

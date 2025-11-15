@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Security Groups -->
+
+    <!-- Base Group: Consultant -->
+    <record id="group_finance_consultant" model="res.groups">
+        <field name="name">Consultoria Financeira / Consultor</field>
+        <field name="category_id" ref="base.module_category_finance"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Consultor de investimentos. Acesso completo a clientes e portfólios.</field>
+    </record>
+
+    <!-- Compliance Officer -->
+    <record id="group_finance_compliance" model="res.groups">
+        <field name="name">Consultoria Financeira / Compliance</field>
+        <field name="category_id" ref="base.module_category_finance"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Responsável por compliance e validação de suitability.</field>
+    </record>
+
+    <!-- Manager -->
+    <record id="group_finance_manager" model="res.groups">
+        <field name="name">Consultoria Financeira / Gerente</field>
+        <field name="category_id" ref="base.module_category_finance"/>
+        <field name="implied_ids" eval="[(4, ref('group_finance_consultant')), (4, ref('group_finance_compliance')), (4, ref('base.group_user'))]"/>
+        <field name="comment">Gerente. Acesso total a todos os dados e relatórios.</field>
+    </record>
+
+    <!-- Record Rules - Consultants see only their clients -->
+    <record id="finance_rule_profile_own" model="ir.rule">
+        <field name="name">Profile - Own Only</field>
+        <field name="model_id" ref="model_finance_profile"/>
+        <field name="groups" eval="[(4, ref('group_finance_consultant'))]"/>
+        <field name="domain_force">[('advisor_id', '=', user.id)]</field>
+        <field name="perm_read">True</field>
+        <field name="perm_write">True</field>
+        <field name="perm_create">True</field>
+        <field name="perm_unlink">False</field>
+    </record>
+
+    <!-- Manager sees all profiles -->
+    <record id="finance_rule_profile_all" model="ir.rule">
+        <field name="name">Profile - All</field>
+        <field name="model_id" ref="model_finance_profile"/>
+        <field name="groups" eval="[(4, ref('group_finance_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read">True</field>
+        <field name="perm_write">True</field>
+        <field name="perm_create">True</field>
+        <field name="perm_unlink">True</field>
+    </record>
+
+    <!-- Suitability - Compliance Officer can read all, Consultant own only -->
+    <record id="finance_rule_suitability_own" model="ir.rule">
+        <field name="name">Suitability - Own Only</field>
+        <field name="model_id" ref="model_finance_suitability"/>
+        <field name="groups" eval="[(4, ref('group_finance_consultant'))]"/>
+        <field name="domain_force">[('advisor_id', '=', user.id)]</field>
+        <field name="perm_read">True</field>
+        <field name="perm_write">True</field>
+        <field name="perm_create">True</field>
+        <field name="perm_unlink">False</field>
+    </record>
+
+    <record id="finance_rule_suitability_compliance" model="ir.rule">
+        <field name="name">Suitability - Compliance All</field>
+        <field name="model_id" ref="model_finance_suitability"/>
+        <field name="groups" eval="[(4, ref('group_finance_compliance'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read">True</field>
+        <field name="perm_write">True</field>
+        <field name="perm_create">True</field>
+        <field name="perm_unlink">False</field>
+    </record>
+
+    <!-- Investment Plan - Own only -->
+    <record id="finance_rule_investment_plan_own" model="ir.rule">
+        <field name="name">Investment Plan - Own Only</field>
+        <field name="model_id" ref="model_finance_investment_plan"/>
+        <field name="groups" eval="[(4, ref('group_finance_consultant'))]"/>
+        <field name="domain_force">[('advisor_id', '=', user.id)]</field>
+        <field name="perm_read">True</field>
+        <field name="perm_write">True</field>
+        <field name="perm_create">True</field>
+        <field name="perm_unlink">False</field>
+    </record>
+
+    <!-- Portfolio - Own only -->
+    <record id="finance_rule_portfolio_own" model="ir.rule">
+        <field name="name">Portfolio - Own Only</field>
+        <field name="model_id" ref="model_finance_portfolio"/>
+        <field name="groups" eval="[(4, ref('group_finance_consultant'))]"/>
+        <field name="domain_force">[('advisor_id', '=', user.id)]</field>
+        <field name="perm_read">True</field>
+        <field name="perm_write">True</field>
+        <field name="perm_create">True</field>
+        <field name="perm_unlink">False</field>
+    </record>
+
+    <!-- Consulting Case - Own only -->
+    <record id="finance_rule_consulting_case_own" model="ir.rule">
+        <field name="name">Consulting Case - Own Only</field>
+        <field name="model_id" ref="model_finance_consulting_case"/>
+        <field name="groups" eval="[(4, ref('group_finance_consultant'))]"/>
+        <field name="domain_force">[('advisor_id', '=', user.id)]</field>
+        <field name="perm_read">True</field>
+        <field name="perm_write">True</field>
+        <field name="perm_create">True</field>
+        <field name="perm_unlink">False</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portfolio Views -->
+
+    <!-- List View -->
+    <record id="finance_portfolio_view_list" model="ir.ui.view">
+        <field name="name">finance.portfolio.list</field>
+        <field name="model">finance.portfolio</field>
+        <field name="arch" type="xml">
+            <list decoration-success="needs_rebalance == False" decoration-warning="needs_rebalance == True">
+                <field name="name"/>
+                <field name="finance_profile_id"/>
+                <field name="advisor_id"/>
+                <field name="total_value"/>
+                <field name="consolidated_return"/>
+                <field name="needs_rebalance"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="finance_portfolio_view_form" model="ir.ui.view">
+        <field name="name">finance.portfolio.form</field>
+        <field name="model">finance.portfolio</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_update_values" type="object" string="Atualizar Valores" class="oe_highlight"/>
+                    <button name="action_rebalance" type="object" string="Rebalancear" modifiers="{'invisible': [('needs_rebalance', '=', False)]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <group string="Informações">
+                            <field name="finance_profile_id" readonly="True"/>
+                            <field name="advisor_id"/>
+                            <field name="date_created" readonly="True"/>
+                            <field name="date_last_update" readonly="True"/>
+                        </group>
+                        <group string="Resumo da Carteira">
+                            <field name="total_value" readonly="True" widget="float"/>
+                            <field name="consolidated_return" readonly="True" widget="float"/>
+                            <field name="needs_rebalance" readonly="True"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Performance">
+                            <group>
+                                <group string="Rentabilidade">
+                                    <field name="consolidated_return" readonly="True" string="Retorno Acumulado (%)"/>
+                                    <field name="ytd_return" string="YTD (%)"/>
+                                    <field name="monthly_return" string="Mês (%)"/>
+                                </group>
+                                <group string="Movimentações">
+                                    <field name="total_contributions" readonly="True" string="Total Aportado"/>
+                                    <field name="total_withdrawals" readonly="True" string="Total Resgatado"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Posições">
+                            <field name="position_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="asset_class"/>
+                                    <field name="asset_name"/>
+                                    <field name="quantity"/>
+                                    <field name="current_price"/>
+                                    <field name="current_value" readonly="True"/>
+                                    <field name="individual_return" readonly="True"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Rebalanceamento">
+                            <group>
+                                <field name="allocation_variance" readonly="True"/>
+                                <field name="needs_rebalance" readonly="True"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="finance_portfolio_view_search" model="ir.ui.view">
+        <field name="name">finance.portfolio.search</field>
+        <field name="model">finance.portfolio</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Carteira"/>
+                <field name="finance_profile_id" string="Perfil"/>
+                <field name="advisor_id" string="Consultor"/>
+                <separator/>
+                <filter name="filter_active" string="Ativas" domain="[('state', '=', 'active')]"/>
+                <filter name="filter_rebalance_needed" string="Aguardando Rebalanceamento" domain="[('needs_rebalance', '=', True)]"/>
+                <separator/>
+                <group expand="1" string="Agrupar por">
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_advisor" string="Consultor" context="{'group_by': 'advisor_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="finance_portfolio_action" model="ir.actions.act_window">
+        <field name="name">Carteiras</field>
+        <field name="res_model">finance.portfolio</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Nenhuma carteira registrada. Crie uma nova!
+            </p>
+        </field>
+    </record>
+
+</odoo>

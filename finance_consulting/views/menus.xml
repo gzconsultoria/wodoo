@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Structure -->
+
+    <!-- Main Menu -->
+    <menuitem
+        id="finance_consulting_menu_root"
+        name="Consultoria Financeira"
+        icon="fa-briefcase"
+        sequence="100"
+        web_icon="finance_consulting,static/description/icon.png"/>
+
+    <!-- Clients & Profiles -->
+    <menuitem
+        id="finance_consulting_menu_clients"
+        name="Clientes"
+        parent="finance_consulting_menu_root"
+        sequence="10"/>
+
+    <menuitem
+        id="finance_consulting_menu_profiles"
+        name="Perfis Financeiros"
+        parent="finance_consulting_menu_clients"
+        action="finance_profile_action"
+        sequence="10"/>
+
+    <menuitem
+        id="finance_consulting_menu_suitability"
+        name="Suitability (CVM)"
+        parent="finance_consulting_menu_clients"
+        action="finance_suitability_action"
+        sequence="20"/>
+
+    <!-- Planning & Investments -->
+    <menuitem
+        id="finance_consulting_menu_planning"
+        name="Planejamento"
+        parent="finance_consulting_menu_root"
+        sequence="20"/>
+
+    <menuitem
+        id="finance_consulting_menu_investment_plans"
+        name="Planos de Investimento"
+        parent="finance_consulting_menu_planning"
+        action="finance_investment_plan_action"
+        sequence="10"/>
+
+    <menuitem
+        id="finance_consulting_menu_portfolios"
+        name="Carteiras"
+        parent="finance_consulting_menu_planning"
+        action="finance_portfolio_action"
+        sequence="20"/>
+
+    <!-- Cases & Follow-up -->
+    <menuitem
+        id="finance_consulting_menu_cases"
+        name="Dossiês"
+        parent="finance_consulting_menu_root"
+        action="finance_consulting_case_action"
+        sequence="30"/>
+
+    <!-- Reports -->
+    <menuitem
+        id="finance_consulting_menu_reports"
+        name="Relatórios"
+        parent="finance_consulting_menu_root"
+        sequence="40"/>
+
+    <menuitem
+        id="finance_consulting_menu_reports_performance"
+        name="Performance de Carteiras"
+        parent="finance_consulting_menu_reports"
+        sequence="10"/>
+
+    <menuitem
+        id="finance_consulting_menu_reports_compliance"
+        name="Compliance"
+        parent="finance_consulting_menu_reports"
+        sequence="20"/>
+
+</odoo>

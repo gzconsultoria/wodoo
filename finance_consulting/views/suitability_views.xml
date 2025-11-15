@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Suitability Views -->
+
+    <!-- List View -->
+    <record id="finance_suitability_view_list" model="ir.ui.view">
+        <field name="name">finance.suitability.list</field>
+        <field name="model">finance.suitability</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="is_expired" decoration-warning="state == 'draft'">
+                <field name="finance_profile_id"/>
+                <field name="advisor_id"/>
+                <field name="risk_profile"/>
+                <field name="investment_experience"/>
+                <field name="date_expiry"/>
+                <field name="is_expired"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="finance_suitability_view_form" model="ir.ui.view">
+        <field name="name">finance.suitability.form</field>
+        <field name="model">finance.suitability</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve" type="object" string="Aprovar e Assinar" class="oe_highlight" modifiers="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_renew" type="object" string="Renovar" modifiers="{'invisible': [('state', '=', 'draft')]}"/>
+                    <field name="state" widget="statusbar" options="{'clickable': False}"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="finance_profile_id"/>
+                    </h1>
+                    <group>
+                        <group string="Informações Gerais">
+                            <field name="advisor_id"/>
+                            <field name="date_created" readonly="True"/>
+                            <field name="signed_date"/>
+                            <field name="date_expiry"/>
+                            <field name="is_expired" readonly="True"/>
+                        </group>
+                        <group string="Status CVM">
+                            <field name="state" readonly="True"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Perfil de Risco">
+                            <group>
+                                <group string="Classificação">
+                                    <field name="risk_profile"/>
+                                    <field name="investment_experience"/>
+                                </group>
+                                <group string="Tolerância ao Risco">
+                                    <field name="loss_tolerance_percent"/>
+                                    <field name="past_losses_experience" nolabel="1" placeholder="Descrever comportamento em perdas anteriores..."/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Conhecimento de Produtos">
+                            <group>
+                                <field name="knows_stocks"/>
+                                <field name="knows_bonds"/>
+                                <field name="knows_funds"/>
+                                <field name="knows_derivates"/>
+                            </group>
+                        </page>
+                        <page string="Dados Financeiros">
+                            <group>
+                                <group string="Patrimônio e Renda">
+                                    <field name="liquid_patrimony"/>
+                                    <field name="monthly_income"/>
+                                    <field name="investment_availability"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Objetivos">
+                            <group>
+                                <group string="Estratégia">
+                                    <field name="primary_objective"/>
+                                    <field name="investment_horizon"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Observações">
+                            <field name="notes" nolabel="1" placeholder="Notas do consultor sobre a avaliação..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="finance_suitability_view_search" model="ir.ui.view">
+        <field name="name">finance.suitability.search</field>
+        <field name="model">finance.suitability</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="finance_profile_id" string="Perfil"/>
+                <field name="advisor_id" string="Consultor"/>
+                <separator/>
+                <filter name="filter_approved" string="Aprovadas" domain="[('state', '=', 'approved')]"/>
+                <filter name="filter_expired" string="Vencidas" domain="[('is_expired', '=', True)]"/>
+                <filter name="filter_draft" string="Rascunhos" domain="[('state', '=', 'draft')]"/>
+                <separator/>
+                <group expand="1" string="Agrupar por">
+                    <filter name="group_by_risk" string="Perfil de Risco" context="{'group_by': 'risk_profile'}"/>
+                    <filter name="group_by_advisor" string="Consultor" context="{'group_by': 'advisor_id'}"/>
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="finance_suitability_action" model="ir.actions.act_window">
+        <field name="name">Suitability (Conformidade CVM)</field>
+        <field name="res_model">finance.suitability</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Nenhuma suitability registrada. Crie uma nova avaliação!
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Finance Profile Views -->
+    
+    <!-- List View -->
+    <record id="finance_profile_view_list" model="ir.ui.view">
+        <field name="name">finance.profile.list</field>
+        <field name="model">finance.profile</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="suitability_status == 'expired'" decoration-warning="monthly_savings &lt; 0">
+                <field name="partner_id"/>
+                <field name="advisor_id"/>
+                <field name="net_worth"/>
+                <field name="aum"/>
+                <field name="monthly_savings"/>
+                <field name="risk_profile"/>
+                <field name="suitability_status"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="finance_profile_view_form" model="ir.ui.view">
+        <field name="name">finance.profile.form</field>
+        <field name="model">finance.profile</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate_profile" type="object" string="Ativar" class="oe_highlight" modifiers="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_pause_profile" type="object" string="Pausar" modifiers="{'invisible': [('state', '!=', 'active')]}"/>
+                    <button name="action_register_review" type="object" string="Registrar Revisão" class="oe_highlight"/>
+                    <button name="action_archive_profile" type="object" string="Arquivar" modifiers="{'invisible': [('state', '=', 'archived')]}"/>
+                    <field name="state" widget="statusbar" options="{'clickable': False}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="ir.actions.act_window" type="action" class="oe_stat_button" icon="fa-file-text" context="{'default_finance_profile_id': id}">
+                            <field name="investment_plan_ids" widget="statinfo" string="Planos"/>
+                        </button>
+                        <button name="ir.actions.act_window" type="action" class="oe_stat_button" icon="fa-briefcase" context="{'default_finance_profile_id': id}">
+                            <field name="consulting_case_ids" widget="statinfo" string="Dossiês"/>
+                        </button>
+                        <button name="ir.actions.act_window" type="action" class="oe_stat_button" icon="fa-line-chart" context="{'default_finance_profile_id': id}">
+                            <field name="portfolio_ids" widget="statinfo" string="Carteiras"/>
+                        </button>
+                    </div>
+                    <h1>
+                        <field name="partner_id" readonly="True"/>
+                    </h1>
+                    <group>
+                        <group string="Informações Gerais">
+                            <field name="advisor_id" widget="many2one"/>
+                            <field name="date_created" readonly="True"/>
+                            <field name="date_last_review"/>
+                        </group>
+                        <group string="Status">
+                            <field name="state"/>
+                            <field name="suitability_status"/>
+                            <field name="suitability_expiry_date" modifiers="{'invisible': [('suitability_status', '=', 'pending')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Dados Financeiros">
+                            <group>
+                                <group string="Patrimônio">
+                                    <field name="net_worth"/>
+                                    <field name="aum"/>
+                                </group>
+                                <group string="Fluxo de Caixa">
+                                    <field name="monthly_income"/>
+                                    <field name="monthly_expenses"/>
+                                    <field name="monthly_savings"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Perfil de Investimento">
+                            <group>
+                                <group string="Risco e Horizonte">
+                                    <field name="risk_profile"/>
+                                    <field name="investment_horizon"/>
+                                    <field name="target_return"/>
+                                </group>
+                                <group string="Objetivos">
+                                    <field name="investment_goals" nolabel="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Suitability">
+                            <group>
+                                <field name="suitability_id" readonly="True"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="finance_profile_view_search" model="ir.ui.view">
+        <field name="name">finance.profile.search</field>
+        <field name="model">finance.profile</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id" string="Cliente"/>
+                <field name="advisor_id" string="Consultor"/>
+                <field name="risk_profile" string="Perfil de Risco"/>
+                <separator/>
+                <filter name="filter_active" string="Ativos" domain="[('state', '=', 'active')]"/>
+                <filter name="filter_suitability_expired" string="Suitability Vencida" domain="[('suitability_status', '=', 'expired')]"/>
+                <filter name="filter_suitability_pending" string="Suitability Pendente" domain="[('suitability_status', '=', 'pending')]"/>
+                <separator/>
+                <group expand="1" string="Agrupar por">
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_advisor" string="Consultor" context="{'group_by': 'advisor_id'}"/>
+                    <filter name="group_by_risk_profile" string="Perfil de Risco" context="{'group_by': 'risk_profile'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="finance_profile_action" model="ir.actions.act_window">
+        <field name="name">Perfis Financeiros</field>
+        <field name="res_model">finance.profile</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Nenhum perfil financeiro encontrado. Crie um novo!
+            </p>
+        </field>
+    </record>
+
+</odoo>

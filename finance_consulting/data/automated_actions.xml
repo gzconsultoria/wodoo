@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Automated Actions -->
+
+    <!-- Alert on Expired Suitability -->
+    <record id="automated_action_suitability_expired" model="ir.actions.server">
+        <field name="name">Alert: Suitability Expired</field>
+        <field name="model_id" ref="model_finance_suitability"/>
+        <field name="state">code</field>
+        <field name="code">
+if record.is_expired and record.state != 'expired':
+    record.state = 'expired'
+    advisor = record.advisor_id
+    advisor.notify_info("A Suitability do cliente %s expirou!" % record.finance_profile_id.partner_id.name)
+        </field>
+    </record>
+
+    <!-- Alert on Portfolio Rebalance Needed -->
+    <record id="automated_action_portfolio_rebalance" model="ir.actions.server">
+        <field name="name">Alert: Rebalancing Needed</field>
+        <field name="model_id" ref="model_finance_portfolio"/>
+        <field name="state">code</field>
+        <field name="code">
+if record.needs_rebalance:
+    advisor = record.advisor_id
+    advisor.notify_info("Carteira %s do cliente %s precisa rebalanceamento!" % (record.name, record.finance_profile_id.partner_id.name))
+        </field>
+    </record>
+
+</odoo>

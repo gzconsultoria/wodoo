@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Investment Plan Views -->
+
+    <!-- List View -->
+    <record id="finance_investment_plan_view_list" model="ir.ui.view">
+        <field name="name">finance.investment_plan.list</field>
+        <field name="model">finance.investment_plan</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'active'" decoration-muted="state == 'archived'">
+                <field name="name"/>
+                <field name="finance_profile_id"/>
+                <field name="advisor_id"/>
+                <field name="expected_return"/>
+                <field name="total_allocation"/>
+                <field name="investment_horizon"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="finance_investment_plan_view_form" model="ir.ui.view">
+        <field name="name">finance.investment_plan.form</field>
+        <field name="model">finance.investment_plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit_for_approval" type="object" string="Submeter para Aprovação" class="oe_highlight" modifiers="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_approve" type="object" string="Aprovar" modifiers="{'invisible': [('state', '!=', 'pending_approval')]}"/>
+                    <button name="action_activate" type="object" string="Ativar" class="oe_highlight" modifiers="{'invisible': [('state', '!=', 'approved')]}"/>
+                    <button name="action_suspend" type="object" string="Suspender" modifiers="{'invisible': [('state', '!=', 'active')]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <group string="Identificação">
+                            <field name="finance_profile_id" readonly="True"/>
+                            <field name="advisor_id"/>
+                            <field name="date_created" readonly="True"/>
+                            <field name="date_approved"/>
+                        </group>
+                        <group string="Estratégia">
+                            <field name="investment_horizon"/>
+                            <field name="expected_return"/>
+                        </group>
+                    </group>
+                    <field name="description" nolabel="1" placeholder="Descrever a justificativa técnica da alocação..."/>
+                    <notebook>
+                        <page string="Alocação de Ativos">
+                            <group>
+                                <group string="Distribuição Recomendada">
+                                    <field name="fixed_income_percent" widget="float" string="Renda Fixa"/>
+                                    <field name="variable_income_percent" widget="float" string="Renda Variável"/>
+                                    <field name="reits_percent" widget="float" string="FII"/>
+                                    <field name="international_percent" widget="float" string="Exterior"/>
+                                    <field name="pension_percent" widget="float" string="Previdência"/>
+                                    <field name="total_allocation" widget="float" readonly="True" string="TOTAL" class="font-weight-bold"/>
+                                </group>
+                            </group>
+                            <separator string="Detalhes por Ativo"/>
+                            <field name="plan_line_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="asset_class"/>
+                                    <field name="asset_name"/>
+                                    <field name="allocation_percent"/>
+                                    <field name="description"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Rebalanceamento">
+                            <group>
+                                <field name="rebalance_frequency"/>
+                                <field name="next_rebalance_date"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="finance_investment_plan_view_search" model="ir.ui.view">
+        <field name="name">finance.investment_plan.search</field>
+        <field name="model">finance.investment_plan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Plano"/>
+                <field name="finance_profile_id" string="Perfil"/>
+                <field name="advisor_id" string="Consultor"/>
+                <separator/>
+                <filter name="filter_active" string="Ativos" domain="[('state', '=', 'active')]"/>
+                <filter name="filter_approved" string="Aprovados" domain="[('state', '=', 'approved')]"/>
+                <filter name="filter_draft" string="Rascunhos" domain="[('state', '=', 'draft')]"/>
+                <separator/>
+                <group expand="1" string="Agrupar por">
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_horizon" string="Horizonte" context="{'group_by': 'investment_horizon'}"/>
+                    <filter name="group_by_advisor" string="Consultor" context="{'group_by': 'advisor_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="finance_investment_plan_action" model="ir.actions.act_window">
+        <field name="name">Planos de Investimento</field>
+        <field name="res_model">finance.investment_plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Nenhum plano de investimento encontrado. Crie um novo!
+            </p>
+        </field>
+    </record>
+
+</odoo>

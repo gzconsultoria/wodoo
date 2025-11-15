@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Default Stages and Data -->
+
+    <!-- Investment Plan Stages (predefined) -->
+    <record id="stage_plan_draft" model="ir.sequence">
+        <field name="name">Plan Status: Draft</field>
+        <field name="code">finance.investment_plan</field>
+    </record>
+
+    <!-- Consulting Case Priorities -->
+    <record id="priority_low" model="ir.model.fields.selection">
+        <field name="name">Low Priority</field>
+    </record>
+
+    <!-- Default Risk Profile Labels -->
+    <record id="risk_conservative" model="finance.profile">
+        <field name="partner_id" ref="base.res_partner_12"/>
+        <field name="advisor_id" ref="base.user_admin"/>
+        <field name="risk_profile">conservative</field>
+        <field name="net_worth">0</field>
+        <field name="aum">0</field>
+        <field name="monthly_income">0</field>
+        <field name="monthly_expenses">0</field>
+    </record>
+
+</odoo>

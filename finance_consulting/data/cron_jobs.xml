@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Automated Actions / Cron Jobs -->
+
+    <!-- Check Suitability Expiry Daily -->
+    <record id="cron_check_suitability_expiry" model="ir.cron">
+        <field name="name">Check Suitability Expiry</field>
+        <field name="model_id" ref="model_finance_suitability"/>
+        <field name="state">code</field>
+        <field name="code">model.check_expired_suitability()</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall">False</field>
+    </record>
+
+    <!-- Check Portfolio Rebalancing Weekly -->
+    <record id="cron_check_portfolio_rebalance" model="ir.cron">
+        <field name="name">Check Portfolio Rebalancing Needed</field>
+        <field name="model_id" ref="model_finance_portfolio"/>
+        <field name="state">code</field>
+        <field name="code">model.check_rebalance_needed()</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">weeks</field>
+        <field name="numbercall">-1</field>
+        <field name="doall">False</field>
+    </record>
+
+</odoo>
