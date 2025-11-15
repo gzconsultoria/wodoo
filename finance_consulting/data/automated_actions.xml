@@ -7,12 +7,7 @@
         <field name="name">Alert: Suitability Expired</field>
         <field name="model_id" ref="model_finance_suitability"/>
         <field name="state">code</field>
-        <field name="code">
-if record.is_expired and record.state != 'expired':
-    record.state = 'expired'
-    advisor = record.advisor_id
-    advisor.notify_info("A Suitability do cliente %s expirou!" % record.finance_profile_id.partner_id.name)
-        </field>
+        <field name="code">record.auto_expire_and_notify()</field>
     </record>
 
     <!-- Alert on Portfolio Rebalance Needed -->
@@ -20,11 +15,7 @@ if record.is_expired and record.state != 'expired':
         <field name="name">Alert: Rebalancing Needed</field>
         <field name="model_id" ref="model_finance_portfolio"/>
         <field name="state">code</field>
-        <field name="code">
-if record.needs_rebalance:
-    advisor = record.advisor_id
-    advisor.notify_info("Carteira %s do cliente %s precisa rebalanceamento!" % (record.name, record.finance_profile_id.partner_id.name))
-        </field>
+        <field name="code">record.notify_rebalance_needed()</field>
     </record>
 
 </odoo>
