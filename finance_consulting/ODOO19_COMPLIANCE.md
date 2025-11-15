@@ -291,7 +291,6 @@ def action_register_review(self):    # ✔️ action_*
 ```xml
 <record id="group_finance_consultant" model="res.groups">
   <field name="name">Consultoria Financeira / Consultor</field>
-  <field name="category_id" ref="base.module_category_finance"/>
 </record>
 ```
 

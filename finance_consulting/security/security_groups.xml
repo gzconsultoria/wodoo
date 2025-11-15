@@ -5,7 +5,6 @@
     <!-- Base Group: Consultant -->
     <record id="group_finance_consultant" model="res.groups">
         <field name="name">Consultoria Financeira / Consultor</field>
-        <field name="category_id" ref="base.module_category_finance"/>
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         <field name="comment">Consultor de investimentos. Acesso completo a clientes e portfólios.</field>
     </record>
@@ -13,7 +12,6 @@
     <!-- Compliance Officer -->
     <record id="group_finance_compliance" model="res.groups">
         <field name="name">Consultoria Financeira / Compliance</field>
-        <field name="category_id" ref="base.module_category_finance"/>
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         <field name="comment">Responsável por compliance e validação de suitability.</field>
     </record>
@@ -21,7 +19,6 @@
     <!-- Manager -->
     <record id="group_finance_manager" model="res.groups">
         <field name="name">Consultoria Financeira / Gerente</field>
-        <field name="category_id" ref="base.module_category_finance"/>
         <field name="implied_ids" eval="[(4, ref('group_finance_consultant')), (4, ref('group_finance_compliance')), (4, ref('base.group_user'))]"/>
         <field name="comment">Gerente. Acesso total a todos os dados e relatórios.</field>
     </record>
