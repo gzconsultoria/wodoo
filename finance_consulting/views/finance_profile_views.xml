@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
     <!-- Finance Profile Views -->
-    
     <!-- List View -->
     <record id="finance_profile_view_list" model="ir.ui.view">
         <field name="name">finance.profile.list</field>
@@ -134,5 +132,4 @@
         </field>
     </record>
 
-    </data>
 </odoo>

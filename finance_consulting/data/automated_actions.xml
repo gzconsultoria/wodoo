@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
     <!-- Automated Actions -->
 
     <!-- Alert on Expired Suitability -->
@@ -19,5 +18,4 @@
         <field name="code">record.notify_rebalance_needed()</field>
     </record>
 
-    </data>
 </odoo>
